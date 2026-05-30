@@ -81,3 +81,8 @@ CLAUDE.md
 page-plan.md
 generation-log.md
 .DS_Store
+
+# OG card build helper + render artifacts
+og-card.html
+og-render.png
+mobile-full.png

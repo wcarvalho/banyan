@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Banyan" />
   <meta property="og:title" content="Task diversity produces systematic transfer but inhibits continual RL" />
   <meta property="og:description" content="Task variety is supposed to make RL agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level instead of climbing." />
-  <meta property="og:image" content="https://wcarvalho.github.io/banyan/static/og-card.png" />
+  <meta property="og:image" content="https://wcarvalho.github.io/banyan/static/og-card-2.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Banyan: task diversity produces systematic transfer but inhibits continual reinforcement learning. A Banyan grid world with a task tree." />
@@ -26,7 +26,7 @@
   <meta name="twitter:creator" content="@cogscikid" />
   <meta name="twitter:title" content="Task diversity produces systematic transfer but inhibits continual RL" />
   <meta name="twitter:description" content="Task variety is supposed to make RL agents generalize. Across a sequence of tasks, more variety past a point makes an agent plateau at a lower level, not climb." />
-  <meta name="twitter:image" content="https://wcarvalho.github.io/banyan/static/og-card.png" />
+  <meta name="twitter:image" content="https://wcarvalho.github.io/banyan/static/og-card-2.png" />
   <meta name="twitter:image:alt" content="Banyan project page social card." />
 
   <!-- Google Scholar citation tags (arXiv id added once minted) -->
@@ -34,8 +34,8 @@
   <meta name="citation_author" content="Seth, Purab" />
   <meta name="citation_author" content="Shah, Neil" />
   <meta name="citation_author" content="Jha, Kunal" />
-  <meta name="citation_author" content="Kleiman-Weiner, Max" />
   <meta name="citation_author" content="Gershman, Samuel J." />
+  <meta name="citation_author" content="Kleiman-Weiner, Max" />
   <meta name="citation_author" content="Carvalho, Wilka" />
   <meta name="citation_publication_date" content="2026" />
   <meta name="citation_pdf_url" content="https://wcarvalho.github.io/banyan/static/banyan-paper.pdf" />
@@ -52,13 +52,13 @@
     {"@type": "Person", "name": "Purab Seth"},
     {"@type": "Person", "name": "Neil Shah"},
     {"@type": "Person", "name": "Kunal Jha"},
-    {"@type": "Person", "name": "Max Kleiman-Weiner"},
     {"@type": "Person", "name": "Samuel J. Gershman"},
+    {"@type": "Person", "name": "Max Kleiman-Weiner"},
     {"@type": "Person", "name": "Wilka Carvalho"}
   ],
   "datePublished": "2026",
   "url": "https://wcarvalho.github.io/banyan/",
-  "image": "https://wcarvalho.github.io/banyan/static/og-card.png"
+  "image": "https://wcarvalho.github.io/banyan/static/og-card-2.png"
 }
   </script>
 
@@ -277,18 +277,18 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
 
   <!-- ========== HERO ========== -->
   <section class="hero">
-    <div class="hero__eyebrow">Banyan · RLC 2026 Workshop</div>
+    <div class="hero__eyebrow">Banyan · Preprint</div>
     <h1 class="hero__title">Task diversity produces systematic transfer<br />but inhibits continual reinforcement learning</h1>
     <p class="hero__claim">Task variety is supposed to make reinforcement learning agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level. It keeps learning each new set of tasks, but stops gaining from one set to the next.</p>
 
     <div class="hero__authors">
-      <span class="author"><a href="https://www.linkedin.com/in/sethpurab/">Purab Seth</a><sup>1</sup></span>
-      <span class="author">Neil Shah<sup>1</sup></span>
+      <span class="author"><a href="https://www.linkedin.com/in/sethpurab/">Purab Seth</a><sup>1,*</sup></span>
+      <span class="author">Neil Shah<sup>1,*</sup></span>
       <span class="author"><a href="https://kjha02.github.io/">Kunal Jha</a><sup>2</sup></span>
-      <span class="author"><a href="http://faculty.washington.edu/maxkw/">Max Kleiman-Weiner</a><sup>2</sup></span>
       <span class="author"><a href="https://gershmanlab.com/">Samuel J. Gershman</a><sup>3,4</sup></span>
+      <span class="author"><a href="http://faculty.washington.edu/maxkw/">Max Kleiman-Weiner</a><sup>2</sup></span>
       <span class="author"><a href="https://cogscikid.com/">Wilka Carvalho</a><sup>3</sup> <span class="corr" title="Corresponding author">✉</span></span>
-      <span class="affiliation"><sup>1</sup>Harvard College &nbsp;·&nbsp; <sup>2</sup>University of Washington &nbsp;·&nbsp; <sup>3</sup>Kempner Institute for the Study of Natural and Artificial Intelligence, Harvard University &nbsp;·&nbsp; <sup>4</sup>Department of Psychology &amp; Center for Brain Science, Harvard University</span>
+      <span class="affiliation"><sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>1</sup>Harvard College &nbsp;·&nbsp; <sup>2</sup>University of Washington &nbsp;·&nbsp; <sup>3</sup>Kempner Institute for the Study of Natural and Artificial Intelligence, Harvard University &nbsp;·&nbsp; <sup>4</sup>Department of Psychology &amp; Center for Brain Science, Harvard University</span>
     </div>
 
     <div class="button-row">
@@ -396,6 +396,10 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
       <img src="static/figures/paradox.png" alt="Across ten sets of tasks, final success climbs at a middle amount of variety (16 by 16) but plateaus at the highest variety (256)." loading="lazy" />
       <figcaption><span class="figure-label">Figure 5</span> <strong>Across ten sets of tasks, a middle amount of variety keeps the agent improving, while the highest variety makes long-run progress flatten.</strong> Final success rate on each set in the sequence. The climbing curve is 16 layouts by 16 topologies; the flat one is the highest-variety condition.</figcaption>
     </figure>
+    <figure class="fig--wide">
+      <img src="static/figures/depth6.png" alt="Success rate through training across the ten sets of tasks, for the deepest tasks alone. Low-variety curves relearn from near zero at each new set and spike high; high-variety curves stay flat at a lower level." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 6</span> <strong>The same pattern is sharpest on the deepest tasks, those with the longest chains of sub-goals.</strong> Success rate through all ten sets for depth 6 alone. Each new set begins at a dashed line. The low-variety curves (red) relearn from near zero at every set and climb steeply; the high-variety curves (green) stay flat at a lower level, gaining little from one set to the next.</figcaption>
+    </figure>
   </section>
 
   <!-- ========== WHY IT MATTERS (T11) ========== -->
@@ -407,7 +411,7 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     </div>
     <figure class="fig--wide">
       <img src="static/figures/backward-continual.png" alt="Success on the first set of tasks keeps rising across the ten-set sequence as variety increases, even as progress on new sets flattens." loading="lazy" />
-      <figcaption><span class="figure-label">Figure 6</span> <strong>The more variety the agent sees, the more its success on the very first set keeps climbing,</strong> even as its progress on new sets flattens.</figcaption>
+      <figcaption><span class="figure-label">Figure 7</span> <strong>The more variety the agent sees, the more its success on the very first set keeps climbing,</strong> even as its progress on new sets flattens.</figcaption>
     </figure>
   </section>
 
@@ -420,7 +424,7 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     </div>
     <figure class="fig--wide">
       <img src="static/figures/ruled-out-cbp.png" alt="Across ten sets of tasks, the flattening of long-run progress remains even with Continual Backprop." loading="lazy" />
-      <figcaption><span class="figure-label">Figure 7</span> <strong>Keeping the network plastic does not restore the lost progress:</strong> the flattening remains under Continual Backprop, evidence against a loss-of-plasticity explanation.</figcaption>
+      <figcaption><span class="figure-label">Figure 8</span> <strong>Keeping the network plastic does not restore the lost progress:</strong> the flattening remains under Continual Backprop, evidence against a loss-of-plasticity explanation.</figcaption>
     </figure>
 
     <aside class="note">
@@ -446,17 +450,17 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <div class="measure">
       <div class="section__heading">Cite</div>
       <h2>BibTeX</h2>
-      <span class="cite-pending">Citation pending. Workshop preprint; arXiv ID will be added once minted.</span>
+      <span class="cite-pending">Citation pending. Preprint; arXiv ID will be added once minted.</span>
       <div class="bibtex">
         <button class="bibtex__copy" data-target="bibtex-block">Copy</button>
         <pre id="bibtex-block"><code>@misc{seth2026banyan,
   title  = {Task diversity produces systematic transfer but
             inhibits continual reinforcement learning},
   author = {Seth, Purab and Shah, Neil and Jha, Kunal and
-            Kleiman-Weiner, Max and Gershman, Samuel J. and
+            Gershman, Samuel J. and Kleiman-Weiner, Max and
             Carvalho, Wilka},
   year   = {2026},
-  note   = {RLC 2026 workshop submission. Preprint.}
+  note   = {Preprint.}
 }</code></pre>
       </div>
     </div>
@@ -469,8 +473,8 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <div>
       <strong>Banyan</strong><br />
       Task diversity produces systematic transfer but inhibits continual reinforcement learning<br />
-      Seth · Shah · Jha · Kleiman-Weiner · Gershman · Carvalho<br />
-      RLC 2026 Workshop
+      Seth · Shah · Jha · Gershman · Kleiman-Weiner · Carvalho<br />
+      Preprint
     </div>
     <div>
       <strong>Resources</strong><br />
