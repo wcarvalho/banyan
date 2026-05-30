@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Banyan: Task diversity produces systematic transfer but inhibits continual RL</title>
+  <meta name="description" content="Task variety is supposed to make RL agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level instead of continuing to climb. Read the paper." />
+
+  <!-- Pre-launch feedback build: keep out of search indexes until arXiv/code are public. -->
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://wcarvalho.github.io/banyan/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Banyan" />
+  <meta property="og:title" content="Task diversity produces systematic transfer but inhibits continual RL" />
+  <meta property="og:description" content="Task variety is supposed to make RL agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level instead of climbing." />
+  <meta property="og:image" content="https://wcarvalho.github.io/banyan/static/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Banyan: task diversity produces systematic transfer but inhibits continual reinforcement learning. A Banyan grid world with a task tree." />
+  <meta property="og:url" content="https://wcarvalho.github.io/banyan/" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:creator" content="@cogscikid" />
+  <meta name="twitter:title" content="Task diversity produces systematic transfer but inhibits continual RL" />
+  <meta name="twitter:description" content="Task variety is supposed to make RL agents generalize. Across a sequence of tasks, more variety past a point makes an agent plateau at a lower level, not climb." />
+  <meta name="twitter:image" content="https://wcarvalho.github.io/banyan/static/og-card.png" />
+  <meta name="twitter:image:alt" content="Banyan project page social card." />
+
+  <!-- Google Scholar citation tags (arXiv id added once minted) -->
+  <meta name="citation_title" content="Task diversity produces systematic transfer but inhibits continual reinforcement learning" />
+  <meta name="citation_author" content="Seth, Purab" />
+  <meta name="citation_author" content="Shah, Neil" />
+  <meta name="citation_author" content="Jha, Kunal" />
+  <meta name="citation_author" content="Kleiman-Weiner, Max" />
+  <meta name="citation_author" content="Gershman, Samuel J." />
+  <meta name="citation_author" content="Carvalho, Wilka" />
+  <meta name="citation_publication_date" content="2026" />
+  <meta name="citation_pdf_url" content="https://wcarvalho.github.io/banyan/static/banyan-paper.pdf" />
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "Task diversity produces systematic transfer but inhibits continual reinforcement learning",
+  "name": "Task diversity produces systematic transfer but inhibits continual reinforcement learning",
+  "abstract": "Continual reinforcement learning aims to produce agents that learn not only to improve at their current tasks but also to adapt as task distributions change. We introduce Banyan, a GPU-accelerated continual RL domain with three independently controllable task axes, and show that while increasing task diversity induces systematic transfer across distribution shifts, too much diversity inhibits a learner's ability to keep improving on new task distributions.",
+  "author": [
+    {"@type": "Person", "name": "Purab Seth"},
+    {"@type": "Person", "name": "Neil Shah"},
+    {"@type": "Person", "name": "Kunal Jha"},
+    {"@type": "Person", "name": "Max Kleiman-Weiner"},
+    {"@type": "Person", "name": "Samuel J. Gershman"},
+    {"@type": "Person", "name": "Wilka Carvalho"}
+  ],
+  "datePublished": "2026",
+  "url": "https://wcarvalho.github.io/banyan/",
+  "image": "https://wcarvalho.github.io/banyan/static/og-card.png"
+}
+  </script>
+
+  <link rel="icon" type="image/png" href="static/favicon.png" />
+  <link rel="apple-touch-icon" href="static/favicon.png" />
+
+  <!-- Google Fonts (Source Serif 4 + Inter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+:root {
+  --bg: #fbf9f5;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --ink-soft: #4a4a4a;
+  --ink-muted: #767676;
+  --rule: #e6e2da;
+  --accent: #b04a2f;
+  --accent-soft: #f3d9cf;
+  --highlight: #fff4cf;
+  --code-bg: #f4f1ea;
+  --placeholder-bg: #fff8e8;
+  --placeholder-rule: #d9b86b;
+  --placeholder-ink: #6b4f1c;
+
+  --font-serif: "Source Serif 4", "Source Serif Pro", "Charter", "Iowan Old Style", "Apple Garamond", Georgia, serif;
+  --font-sans: "Inter", "Helvetica Neue", "Arial", system-ui, sans-serif;
+  --font-mono: "Berkeley Mono", "JetBrains Mono", "SF Mono", "Menlo", monospace;
+
+  --fs-base: 20px;
+  --fs-sm: 16px;
+  --fs-lg: 22px;
+  --fs-xl: 28px;
+  --fs-2xl: 38px;
+  --fs-3xl: 54px;
+
+  --lh-tight: 1.2;
+  --lh-body: 1.6;
+  --lh-loose: 1.75;
+
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 16px; --sp-4: 24px;
+  --sp-5: 32px; --sp-6: 48px; --sp-7: 64px; --sp-8: 96px;
+
+  --measure: 70ch;
+  --col-narrow: 720px;
+  --col-wide: 1100px;
+  --hero-measure: 990px; /* width of the title's longer line; subtitle matches it */
+
+  --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(20,20,20,0.04), 0 2px 6px rgba(20,20,20,0.04);
+  --shadow-md: 0 4px 16px rgba(20,20,20,0.08);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-serif); font-size: var(--fs-base); line-height: var(--lh-body);
+  font-feature-settings: "kern","liga","onum"; text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 600; line-height: var(--lh-tight); margin: 0 0 var(--sp-3); letter-spacing: -0.01em; }
+h1 { font-size: var(--fs-3xl); letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-2xl); margin-top: var(--sp-7); }
+h3 { font-size: var(--fs-xl); margin-top: var(--sp-5); }
+h4 { font-size: var(--fs-lg); }
+p { margin: 0 0 var(--sp-3); }
+
+a { color: var(--accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--accent-soft); transition: text-decoration-color 0.15s ease; }
+a:hover { text-decoration-color: var(--accent); }
+
+code, pre, kbd { font-family: var(--font-mono); }
+code { background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+pre { background: var(--code-bg); padding: var(--sp-4); border-radius: var(--radius-md); overflow-x: auto; font-size: var(--fs-sm); line-height: 1.5; border: 1px solid var(--rule); }
+pre code { background: none; padding: 0; font-size: inherit; }
+
+.container { max-width: var(--col-wide); margin: 0 auto; padding: 0 var(--sp-4); }
+.measure { max-width: var(--measure); margin-left: auto; margin-right: auto; }
+section { padding: var(--sp-6) 0; }
+section + section { border-top: 1px solid var(--rule); }
+.lead { font-size: var(--fs-lg); color: var(--ink-soft); }
+.axis { font-weight: 600; color: var(--ink); white-space: nowrap; }
+
+/* Hero */
+.hero { padding: var(--sp-7) 0 var(--sp-6); text-align: left; }
+.hero__eyebrow { font-family: var(--font-sans); font-size: var(--fs-sm); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: var(--sp-3); }
+.hero__title { font-size: clamp(34px, 5vw, var(--fs-3xl)); margin-bottom: var(--sp-4); max-width: var(--hero-measure); }
+.hero__claim { font-size: var(--fs-xl); color: var(--ink-soft); margin-bottom: var(--sp-4); max-width: var(--hero-measure); font-style: italic; line-height: 1.4; }
+.hero__authors { font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--ink-soft); margin-bottom: var(--sp-5); line-height: 1.8; }
+.hero__authors a { color: var(--ink-soft); text-decoration-color: var(--rule); }
+.hero__authors a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.hero__authors .author { white-space: nowrap; }
+.hero__authors .author sup { color: var(--ink-muted); }
+.hero__authors .corr { color: var(--accent); }
+.hero__authors .affiliation { display: block; color: var(--ink-muted); margin-top: var(--sp-3); font-size: 14px; line-height: 1.6; }
+
+.hero__demo { max-width: 66%; margin: var(--sp-5) 0 0; border-radius: var(--radius-lg); overflow: hidden; background: #0c0c0c; box-shadow: var(--shadow-md); border: 1px solid var(--rule); }
+.hero__demo img, .hero__demo video { display: block; width: 100%; height: auto; }
+.hero__demo-cap { max-width: 66%; font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--ink-muted); margin-top: var(--sp-2); }
+@media (max-width: 720px) { .hero__demo, .hero__demo-cap { max-width: 100%; } }
+
+/* Button row */
+.button-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin: var(--sp-4) 0; }
+.btn { display: inline-flex; align-items: center; gap: var(--sp-2); padding: 10px 18px; background: var(--ink); color: var(--bg); font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 500; text-decoration: none; border-radius: 999px; border: 1px solid var(--ink); transition: transform 0.1s ease, background 0.15s ease; min-height: 44px; }
+.btn:hover { background: var(--accent); border-color: var(--accent); text-decoration: none; }
+.btn--secondary { background: transparent; color: var(--ink); border-color: var(--rule); }
+.btn--secondary:hover { background: var(--surface); border-color: var(--ink); color: var(--ink); }
+.btn--placeholder { background: transparent; color: var(--ink-muted); border-color: var(--rule); border-style: dashed; cursor: default; }
+.btn--placeholder:hover { background: transparent; color: var(--ink-muted); border-color: var(--rule); }
+.btn .icon { width: 18px; height: 18px; }
+
+/* Sections */
+.section__heading { font-family: var(--font-sans); font-size: var(--fs-sm); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--sp-2); }
+.tldr { background: var(--surface); border-left: 4px solid var(--accent); padding: var(--sp-4) var(--sp-5); border-radius: 0 var(--radius-md) var(--radius-md) 0; margin: var(--sp-5) 0; }
+.tldr p { margin-bottom: 0; }
+.tldr p strong { background: linear-gradient(transparent 60%, var(--highlight) 60%); }
+
+.contributions { list-style: none; padding: 0; margin: var(--sp-5) auto 0; counter-reset: contrib; max-width: var(--measure); }
+.contributions li { counter-increment: contrib; position: relative; padding-left: var(--sp-7); margin-bottom: var(--sp-4); }
+.contributions li::before { content: counter(contrib); position: absolute; left: 0; top: 0; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: var(--bg); display: grid; place-items: center; font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 600; }
+
+/* Stat strip - quantified results a skimmer reads without prose */
+.stat-strip { list-style: none; display: flex; flex-wrap: wrap; gap: var(--sp-3); padding: 0; margin: var(--sp-4) auto 0; max-width: var(--measure); }
+.stat-strip li { flex: 1 1 0; min-width: 180px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--rule); border-top: 3px solid var(--accent); border-radius: var(--radius-md); padding: var(--sp-3) var(--sp-4); }
+.stat-strip__val { font-family: var(--font-sans); font-weight: 600; font-size: var(--fs-lg); color: var(--ink); letter-spacing: -0.01em; }
+.stat-strip__lbl { font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--ink-muted); line-height: 1.35; }
+@media (max-width: 720px) { .stat-strip li { flex: 1 1 100%; } }
+
+/* End-of-narrative call to action (Read the paper) */
+.cta { max-width: var(--measure); margin: var(--sp-6) auto 0; background: var(--surface); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: var(--sp-4) var(--sp-5); display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4); flex-wrap: wrap; }
+.cta p { margin: 0; font-size: var(--fs-sm); color: var(--ink-soft); max-width: 46ch; }
+.cta .btn { white-space: nowrap; }
+
+aside.note { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) auto; max-width: var(--measure); font-size: var(--fs-sm); color: var(--ink-soft); }
+aside.note strong { color: var(--ink); }
+
+/* Figures - capped to the body text column so they never run wider than the prose */
+figure { margin: var(--sp-6) auto; text-align: center; max-width: var(--measure); }
+figure.fig--wide { max-width: var(--col-wide); }
+figure img, figure video { max-width: 100%; height: auto; border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow-sm); border: 1px solid var(--rule); }
+figcaption { font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--ink-soft); text-align: left; margin-top: var(--sp-3); max-width: var(--measure); margin-left: auto; margin-right: auto; line-height: 1.55; }
+figcaption .figure-label { font-weight: 600; color: var(--ink); margin-right: var(--sp-2); }
+.fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); align-items: end; max-width: var(--measure); margin-left: auto; margin-right: auto; }
+@media (max-width: 720px) { .fig-grid { grid-template-columns: 1fr; } }
+
+/* Pullquote */
+.pullquote { font-size: var(--fs-2xl); line-height: 1.3; font-style: italic; color: var(--ink); border-left: 4px solid var(--accent); padding: var(--sp-4) var(--sp-6); margin: var(--sp-6) auto; max-width: 32ch; }
+
+/* BibTeX */
+.bibtex { position: relative; }
+.bibtex pre { margin: 0; }
+.bibtex__copy { position: absolute; top: var(--sp-3); right: var(--sp-3); background: var(--ink); color: var(--bg); border: none; border-radius: var(--radius-sm); padding: 6px 12px; font-family: var(--font-sans); font-size: var(--fs-sm); cursor: pointer; min-height: 32px; }
+.bibtex__copy:hover { background: var(--accent); }
+.bibtex__copy[data-state="copied"] { background: #2d7a3a; }
+.cite-pending { font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--placeholder-ink); background: var(--placeholder-bg); border: 1px dashed var(--placeholder-rule); border-radius: var(--radius-sm); padding: var(--sp-2) var(--sp-3); display: inline-block; margin-bottom: var(--sp-3); }
+
+/* Methods */
+details.methods { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius-md); padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) auto; max-width: var(--measure); }
+details.methods summary { font-family: var(--font-sans); font-size: var(--fs-sm); text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); cursor: pointer; list-style: none; font-weight: 600; }
+details.methods summary::-webkit-details-marker { display: none; }
+details.methods summary::after { content: "▸"; margin-left: var(--sp-2); display: inline-block; transition: transform 0.15s ease; }
+details.methods[open] summary::after { transform: rotate(90deg); }
+details.methods .methods__body { margin-top: var(--sp-4); }
+
+/* Footer */
+footer { padding: var(--sp-7) 0 var(--sp-6); border-top: 1px solid var(--rule); font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--ink-soft); }
+footer a { color: inherit; }
+footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: var(--sp-5); }
+@media (max-width: 720px) { footer .footer__cols { grid-template-columns: 1fr; } }
+
+/* Sticky nav */
+.topnav { position: sticky; top: 0; z-index: 10; background: rgba(251,249,245,0.92); backdrop-filter: saturate(140%) blur(10px); -webkit-backdrop-filter: saturate(140%) blur(10px); border-bottom: 1px solid var(--rule); }
+.topnav__inner { display: flex; align-items: center; justify-content: space-between; padding: var(--sp-3) var(--sp-4); max-width: var(--col-wide); margin: 0 auto; }
+.topnav__brand { font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 600; text-decoration: none; color: var(--ink); }
+.topnav__links { display: flex; gap: var(--sp-4); font-family: var(--font-sans); font-size: var(--fs-sm); }
+.topnav__links a { color: var(--ink-soft); text-decoration: none; }
+.topnav__links a:hover { color: var(--accent); }
+@media (max-width: 720px) { .topnav__links { display: none; } }
+
+/* Mobile */
+@media (max-width: 720px) {
+  :root { --fs-base: 18px; --fs-3xl: 38px; --fs-2xl: 30px; --fs-xl: 22px; }
+  section { padding: var(--sp-5) 0; }
+  .hero { padding: var(--sp-5) 0; }
+  .button-row .btn { flex: 1 1 calc(50% - var(--sp-3)); justify-content: center; }
+}
+
+/* Print */
+@media print {
+  .topnav, .button-row, .bibtex__copy { display: none; }
+  body { background: white; }
+  a { color: var(--ink); text-decoration: underline; }
+}
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav__inner">
+    <a class="topnav__brand" href="#">Banyan</a>
+    <div class="topnav__links">
+      <a href="#tldr">TLDR</a>
+      <a href="#banyan">Banyan</a>
+      <a href="#evidence">Single shift</a>
+      <a href="#results">The paradox</a>
+      <a href="#why">Why it matters</a>
+      <a href="#cite">Cite</a>
+    </div>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="hero__eyebrow">Banyan · RLC 2026 Workshop</div>
+    <h1 class="hero__title">Task diversity produces systematic transfer<br />but inhibits continual reinforcement learning</h1>
+    <p class="hero__claim">Task variety is supposed to make reinforcement learning agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level. It keeps learning each new set of tasks, but stops gaining from one set to the next.</p>
+
+    <div class="hero__authors">
+      <span class="author"><a href="https://www.linkedin.com/in/sethpurab/">Purab Seth</a><sup>1</sup></span>
+      <span class="author">Neil Shah<sup>1</sup></span>
+      <span class="author"><a href="https://kjha02.github.io/">Kunal Jha</a><sup>2</sup></span>
+      <span class="author"><a href="http://faculty.washington.edu/maxkw/">Max Kleiman-Weiner</a><sup>2</sup></span>
+      <span class="author"><a href="https://gershmanlab.com/">Samuel J. Gershman</a><sup>3,4</sup></span>
+      <span class="author"><a href="https://cogscikid.com/">Wilka Carvalho</a><sup>3</sup> <span class="corr" title="Corresponding author">✉</span></span>
+      <span class="affiliation"><sup>1</sup>Harvard College &nbsp;·&nbsp; <sup>2</sup>University of Washington &nbsp;·&nbsp; <sup>3</sup>Kempner Institute for the Study of Natural and Artificial Intelligence, Harvard University &nbsp;·&nbsp; <sup>4</sup>Department of Psychology &amp; Center for Brain Science, Harvard University</span>
+    </div>
+
+    <div class="button-row">
+      <a class="btn" href="static/banyan-paper.pdf" aria-label="Read the paper (PDF)">📄&nbsp; Paper</a>
+      <span class="btn btn--placeholder" aria-label="Code coming soon">💻&nbsp; Code (soon)</span>
+      <span class="btn btn--placeholder" aria-label="Thread coming soon">🧵&nbsp; Thread (soon)</span>
+    </div>
+
+    <div class="hero__demo">
+      <video autoplay muted playsinline loop preload="metadata" poster="static/hero-poster.jpg" fetchpriority="high">
+        <source src="static/hero.mp4" type="video/mp4" />
+      </video>
+    </div>
+    <p class="hero__demo-cap">Each Banyan world is a map the agent moves through, paired with a goal that splits into sub-goals arranged as a tree. The agent sees only the top goal, never the tree, and has to discover the order things must be done.</p>
+  </section>
+
+  <!-- ========== TLDR ========== -->
+  <section id="tldr">
+    <div class="measure">
+      <div class="section__heading">TLDR</div>
+      <div class="tldr">
+        <p>Task variety is the usual recipe for getting agents to generalize. We asked what it does when an agent's tasks never stop changing, and the answer runs both ways. More variety helps the agent pick up each new set of tasks: it starts near where it left off instead of relearning from scratch. But across many sets in a row, that same variety holds it back: its performance on each new set levels off at a lower ceiling instead of climbing higher than the last. <strong>The agents trained on the most varied sets keep getting better at their old tasks even as their gains on new ones flatten.</strong></p>
+      </div>
+      <ul class="stat-strip">
+        <li><span class="stat-strip__val">Barely any drop</span><span class="stat-strip__lbl">With enough variety, an agent starts a new set of tasks near where it left off, instead of relearning from scratch.</span></li>
+        <li><span class="stat-strip__val">A middle amount wins</span><span class="stat-strip__lbl">Across ten sets of tasks in a row, the agent keeps improving most at moderate variety (16 layouts &times; 16 tree shapes).</span></li>
+        <li><span class="stat-strip__val">Too much backfires</span><span class="stat-strip__lbl">Push variety higher and success on the final set drops (0.95 to 0.80): the agent stops climbing from one set to the next.</span></li>
+      </ul>
+    </div>
+
+    <p class="measure" style="margin-top: var(--sp-4);">Here is the whole finding in four steps, from the tool we built to the result that surprised us.</p>
+    <ol class="contributions">
+      <li><strong>A simulator that turns task variety into a dial.</strong> Banyan is a fast, open simulator that lets us turn three ingredients of a task up or down on their own: the map <span class="axis">layouts (𝕃)</span> an agent navigates, the <span class="axis">task-tree topologies (𝕋)</span> that set how its sub-goals depend on one another, and the <span class="axis">task-tree object assignments (𝕆)</span> that fill those sub-goals with concrete objects. Together they define billions of tasks, and it runs on an academic budget.</li>
+      <li><strong>One new set of tasks: the relearning disappears.</strong> Give an agent a new set of tasks, and more variety along any one of those three ingredients lets it start near where it ended the last set, instead of relearning from scratch. This holds for two standard RL algorithms, PPO and PQN.</li>
+      <li><strong>Ten sets in a row: the story flips.</strong> Chain ten sets of tasks one after another, and long-run success peaks at a middle amount of variety (16 layouts by 16 topologies), then steadily declines as variety grows. More variety, less improvement over the long run.</li>
+      <li><strong>What stalls is specialization, not learning.</strong> That same variety keeps lifting the agent's performance on its first set of tasks even as its progress on new sets flattens. The agent is learning the structure shared across tasks while losing the ability to specialize to any one of them.</li>
+    </ol>
+  </section>
+
+  <!-- ========== WHY DIVERSITY (T2-T3) ========== -->
+  <section id="setup">
+    <div class="measure">
+      <div class="section__heading">The setup</div>
+      <h2>Variety is the standard route to generalization</h2>
+      <p class="lead">This recipe has a strong track record.</p>
+      <p>Domain randomization varies an environment's visual and physical properties so that a policy trained only in simulation works on a real robot. XLand trained agents on a huge space of games, and they then solved millions of unseen ones with no extra training. Lake and Baroni showed that the <em>right</em> set of training tasks can even teach a neural network to generalize compositionally, a question open since Fodor and Pylyshyn first raised it.</p>
+      <p>Almost all of this evidence tests an agent <em>after</em> training has stopped, with its weights frozen. <strong>Nobody has asked what task variety does while the agent is still learning</strong>, as it moves through one new set of tasks after another. That is the question Banyan is built to answer.</p>
+    </div>
+  </section>
+
+  <!-- ========== THE IDEA: BANYAN (T4-T5) ========== -->
+  <section id="banyan">
+    <div class="measure">
+      <div class="section__heading">The idea</div>
+      <h2>Banyan: turn the ingredients of a task into dials</h2>
+      <p>A Banyan task is a small world the agent moves through, plus a goal. The goal splits into sub-goals, and those sub-goals are arranged as a tree. We can dial three ingredients of the task on their own: the map <span class="axis">layouts (𝕃)</span> the agent navigates, the <span class="axis">task-tree topologies (𝕋)</span> that set how the sub-goals depend on one another, and the <span class="axis">task-tree object assignments (𝕆)</span> that decide which concrete objects fill each sub-goal. Varying one at a time is what lets us pin an effect on a specific kind of variety rather than on variety in general.</p>
+      <p>Trees are a useful way to describe a task because most tasks can be written as trees, including language. When we change a tree's <em>topology</em>, we change the compositional structure of the task: which sub-goals must be solved, and in what order. That makes topology the ingredient where compositional structure should matter most, and it is the one to watch.</p>
+    </div>
+    <figure>
+      <img src="static/figures/environment.png" alt="Overview of Banyan: a task is a map plus a goal that splits into sub-goals arranged as a tree; the layouts, task-tree topologies, and object assignments can each be dialed independently; procedural generation yields billions of tasks." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 1</span> <strong>A Banyan task is a map plus a goal that splits into sub-goals arranged as a tree.</strong> Three ingredients can be dialed on their own: the <strong>layouts (𝕃)</strong> the agent navigates, the <strong>task-tree topologies (𝕋)</strong> that set how sub-goals depend on one another, and the <strong>object assignments (𝕆)</strong> that fill them. Procedural generation yields billions of tasks.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ========== SINGLE SHIFT (T6) + topology + robustness ========== -->
+  <section id="evidence">
+    <div class="measure">
+      <div class="section__heading">One distribution shift</div>
+      <h2>One change of tasks: the relearning vanishes</h2>
+      <p>Start by changing the agent's tasks just once, from a first set to a second. The moment the tasks change, performance usually drops and the agent has to relearn. We call the size of that drop the <strong>transfer gap</strong>: how far the agent falls, and so how much it must relearn. Increasing the variety along any one of the three ingredients shrinks this gap toward zero. The agent begins the second set near the performance it reached on the first, even when the best strategy for the two sets is different. This holds for both PPO and PQN.</p>
+    </div>
+    <figure class="fig--wide">
+      <img src="static/figures/single-shift.png" alt="Plots showing the transfer gap shrinking toward zero as variety increases along layouts, object assignments, and topologies, for both PPO and PQN." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 2</span> <strong>More variety along any one ingredient shrinks the transfer gap toward zero:</strong> the agent begins a new set of tasks near where it ended the last. Shown for both PPO (top) and PQN (bottom).</figcaption>
+    </figure>
+
+    <div class="measure">
+      <h3>Only the tree shape helps old tasks</h3>
+      <p>Now look the other way. <strong>Backward transfer</strong> asks how the agent's skill on an earlier set of tasks changes after it trains on a later one. Here the three ingredients come apart. Adding more layouts or more object assignments does almost nothing. Adding more topologies makes a large difference. This holds for both PPO and PQN, and it is the first sign that what the agent carries forward is compositional structure, not surface detail.</p>
+    </div>
+    <figure class="fig--wide">
+      <img src="static/figures/backward-topology.png" alt="Backward transfer to the first set of tasks improves as the number of topologies increases, but stays flat for layouts and object assignments." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 3</span> <strong>Only varying the number of topologies improves backward transfer to the first set of tasks;</strong> varying layouts or object assignments does not. Shown for both PPO (top) and PQN (bottom).</figcaption>
+    </figure>
+
+    <div class="measure">
+      <h3>The effect is not an artifact of grid-worlds</h3>
+      <p>To check that none of this depends on a grid world, we built a continuous-control version of Banyan, where the agent drives a point mass into objects to push them around. The effect persists: more variety still improves how the agent both starts on new tasks and holds onto old ones.</p>
+    </div>
+    <figure>
+      <img src="static/figures/continuous.png" alt="Results in the continuous-control point-mass version of Banyan, showing the same variety effect on starting new tasks and holding onto old ones." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 4</span> <strong>The same effect appears in a continuous-control version of Banyan,</strong> where the agent drives a point mass into objects. More variety improves how it both starts on new tasks and holds onto old ones.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ========== THE PARADOX (T9-T10) ========== -->
+  <section id="results">
+    <div class="measure">
+      <div class="section__heading">The paradox</div>
+      <h2>Across ten sets of tasks, variety holds the agent back</h2>
+      <p>What happens across a sequence of ten sets of tasks, one after another? We grow two ingredients together, the number of layouts and the number of topologies, and let a single agent learn through all ten in turn. The quantity to watch is the success rate the agent reaches by the end of its tenth set. Plot that against variety and the trend inverts: the final success climbs to a peak at a middle amount of variety, then falls the more we add.</p>
+      <p>At that <strong>middle amount of variety</strong> (16 layouts by 16 topologies) the final success <em>climbs</em> with each new set: the agent gets better and better at picking up the next one. Past that point, more variety steadily <em>lowers</em> it. As variety grows from 16 toward 256, the final success rate falls in order, from about 0.95 to 0.91, 0.86, 0.82, and 0.80. The same variety that smooths every single change is what flattens the long run.</p>
+    </div>
+    <figure class="fig--wide">
+      <img src="static/figures/paradox.png" alt="Across ten sets of tasks, final success climbs at a middle amount of variety (16 by 16) but plateaus at the highest variety (256)." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 5</span> <strong>Across ten sets of tasks, a middle amount of variety keeps the agent improving, while the highest variety makes long-run progress flatten.</strong> Final success rate on each set in the sequence. The climbing curve is 16 layouts by 16 topologies; the flat one is the highest-variety condition.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ========== WHY IT MATTERS (T11) ========== -->
+  <section id="why">
+    <blockquote class="pullquote">What stalls is not learning, but specialization.</blockquote>
+    <div class="measure">
+      <p>Here is the strange part. The more variety an agent has seen, the better it keeps getting on its very first set of tasks, even as its gains on new ones level off. The agent trained on the most varied sets is still improving on its old tasks while its progress on new ones plateaus.</p>
+      <p>The two halves fit together once you see what the agent is learning. It is picking up the structure <em>shared</em> across tasks, and that shared structure is exactly what lifts the old sets. What it loses is the ability to <em>specialize</em> to whatever is new in the set in front of it. Varied early sets interfere with later ones. Variety buys a general solution at the cost of a sharp one.</p>
+    </div>
+    <figure class="fig--wide">
+      <img src="static/figures/backward-continual.png" alt="Success on the first set of tasks keeps rising across the ten-set sequence as variety increases, even as progress on new sets flattens." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 6</span> <strong>The more variety the agent sees, the more its success on the very first set keeps climbing,</strong> even as its progress on new sets flattens.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ========== WHAT WE RULED OUT (T12) + NEXT ========== -->
+  <section id="next">
+    <div class="measure">
+      <div class="section__heading">What's next</div>
+      <h2>Is this just loss of plasticity? We don't think so</h2>
+      <p>The obvious suspect is loss of plasticity, the network slowly going rigid until it can no longer learn. We tested that directly. <strong>Continual Backprop, a method built to keep networks plastic, does not recover the lost progress.</strong> Making the network bigger does not seem to either, though that result is still being finalized. The likeliest explanation is <em>interference</em>: the structure shared across sets, which the agent keeps consolidating, competes with the specialization each new set demands.</p>
+    </div>
+    <figure class="fig--wide">
+      <img src="static/figures/ruled-out-cbp.png" alt="Across ten sets of tasks, the flattening of long-run progress remains even with Continual Backprop." loading="lazy" />
+      <figcaption><span class="figure-label">Figure 7</span> <strong>Keeping the network plastic does not restore the lost progress:</strong> the flattening remains under Continual Backprop, evidence against a loss-of-plasticity explanation.</figcaption>
+    </figure>
+
+    <aside class="note">
+      <strong>Scope.</strong> Banyan is a controlled testbed, not a benchmark to top. The point is the reversal: the relationship between task variety and long-run learning reverses past a middle amount of variety, and we can trace it to one ingredient (the task-tree topologies). The capacity result mentioned above is still being finalized for the appendix; see the paper for the current state.
+    </aside>
+
+    <details class="methods">
+      <summary>Methods &amp; experimental detail</summary>
+      <div class="methods__body">
+        <p>Each task is built by drawing a layout from a precomputed pool and a task tree from a precomputed set of distinct trees. A tree's topology fixes its depth, its branching, and whether each node transforms a single object or combines two, which together set which sub-goals must be solved and in what order. The objects that fill the leaves are placed on reachable tiles in the layout. The agent sees only the <em>root</em> of the tree as its goal. It never sees the tree itself, and has to learn which sequences of object interactions finish the task.</p>
+        <p><strong>Single-shift study:</strong> PPO and PQN (Parallelized Q-Network), sweeping variety along each ingredient on its own. <strong>Ten-shift study:</strong> layouts and topologies grown together, with Continual Backprop and a capacity sweep as controls. Full hyperparameters, the other axes, and depth-wise breakdowns are in the paper.</p>
+      </div>
+    </details>
+
+    <div class="cta">
+      <p>The paper works through the other axes of variety, the continuous-control version, and the controls behind these claims.</p>
+      <a class="btn" href="static/banyan-paper.pdf" aria-label="Read the paper (PDF)">📄&nbsp; Read the paper</a>
+    </div>
+  </section>
+
+  <!-- ========== CITATION ========== -->
+  <section id="cite">
+    <div class="measure">
+      <div class="section__heading">Cite</div>
+      <h2>BibTeX</h2>
+      <span class="cite-pending">Citation pending. Workshop preprint; arXiv ID will be added once minted.</span>
+      <div class="bibtex">
+        <button class="bibtex__copy" data-target="bibtex-block">Copy</button>
+        <pre id="bibtex-block"><code>@misc{seth2026banyan,
+  title  = {Task diversity produces systematic transfer but
+            inhibits continual reinforcement learning},
+  author = {Seth, Purab and Shah, Neil and Jha, Kunal and
+            Kleiman-Weiner, Max and Gershman, Samuel J. and
+            Carvalho, Wilka},
+  year   = {2026},
+  note   = {RLC 2026 workshop submission. Preprint.}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer__cols">
+    <div>
+      <strong>Banyan</strong><br />
+      Task diversity produces systematic transfer but inhibits continual reinforcement learning<br />
+      Seth · Shah · Jha · Kleiman-Weiner · Gershman · Carvalho<br />
+      RLC 2026 Workshop
+    </div>
+    <div>
+      <strong>Resources</strong><br />
+      <a href="static/banyan-paper.pdf">Paper (PDF)</a><br />
+      Code coming soon<br />
+      Thread coming soon
+    </div>
+    <div>
+      <strong>Contact</strong><br />
+      <a href="mailto:wcarvalho@g.harvard.edu">wcarvalho@g.harvard.edu</a><br />
+      <a href="https://gershmanlab.com/">Gershman Lab</a><br />
+      <a href="https://kempnerinstitute.harvard.edu/">Kempner Institute</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.bibtex__copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.target);
+      if (!target) return;
+      navigator.clipboard.writeText(target.innerText.trim()).then(() => {
+        btn.dataset.state = 'copied';
+        btn.textContent = 'Copied';
+        setTimeout(() => { delete btn.dataset.state; btn.textContent = 'Copy'; }, 1600);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

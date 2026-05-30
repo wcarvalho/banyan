@@ -1,0 +1,83 @@
+# Secrets / credentials
+.env
+.env.*
+!.env.example
+!.env.template
+*.token
+*.tokens
+*.pem
+*.key
+*-key.json
+credentials.json
+token.json
+service-account*.json
+firebase-key.json
+datastore-key.json
+.config/
+.secrets/
+secrets/
+huggingface_token.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+.venv.*/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.coverage
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+
+# Ruby (Jekyll)
+vendor/bundle/
+vendor/
+_site/
+.jekyll-metadata
+Gemfile.lock
+
+# Data
+*.parquet
+*.csv.gz
+*.db
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# OS
+.DS_Store
+.AppleDouble
+.Spotlight-V100
+.Trashes
+._*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local-only project Claude state
+.claude/
+
+# Playwright
+.playwright-mcp/
+
+# Logs
+*.log
+
+# Local-only authoring artifacts — never publish to the public site/repo
+tweet/
+CLAUDE.md
+page-plan.md
+generation-log.md
+.DS_Store
