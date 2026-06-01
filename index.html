@@ -156,7 +156,13 @@ section + section { border-top: 1px solid var(--rule); }
 .hero__authors .author { white-space: nowrap; }
 .hero__authors .author sup { color: var(--ink-muted); }
 .hero__authors .corr { color: var(--accent); }
-.hero__authors .affiliation { display: block; color: var(--ink-muted); margin-top: var(--sp-3); font-size: 14px; line-height: 1.6; }
+.hero__authors .affiliation-line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); color: var(--ink-muted); margin-top: var(--sp-3); font-size: 14px; }
+.hero__authors .affil-group { display: inline-flex; align-items: center; gap: 6px; }
+.hero__authors .affil-note { color: var(--ink-muted); }
+.hero__authors .affil-group sup, .hero__authors .affil-note sup { color: var(--ink-muted); }
+.hero__authors .lab-logo { height: 22px; width: auto; opacity: 0.85; vertical-align: middle; margin-right: 2px; }
+/* the Block W reads small at 22px; give it a touch more height */
+.hero__authors .lab-logo--uw { height: 24px; }
 
 .hero__demo { max-width: 66%; margin: var(--sp-5) 0 0; border-radius: var(--radius-lg); overflow: hidden; background: #0c0c0c; box-shadow: var(--shadow-md); border: 1px solid var(--rule); }
 .hero__demo img, .hero__demo video { display: block; width: 100%; height: auto; }
@@ -288,7 +294,13 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
       <span class="author"><a href="https://gershmanlab.com/">Samuel J. Gershman</a><sup>3,4</sup></span>
       <span class="author"><a href="http://faculty.washington.edu/maxkw/">Max Kleiman-Weiner</a><sup>2</sup></span>
       <span class="author"><a href="https://cogscikid.com/">Wilka Carvalho</a><sup>3</sup> <span class="corr" title="Corresponding author">✉</span></span>
-      <span class="affiliation"><sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>1</sup>Harvard College &nbsp;·&nbsp; <sup>2</sup>University of Washington &nbsp;·&nbsp; <sup>3</sup>Kempner Institute for the Study of Natural and Artificial Intelligence, Harvard University &nbsp;·&nbsp; <sup>4</sup>Department of Psychology &amp; Center for Brain Science, Harvard University</span>
+      <div class="affiliation-line">
+        <span class="affil-note"><sup>*</sup>Equal contribution</span>
+        <span class="affil-group"><img class="lab-logo" src="static/images/harvard.svg" alt="Harvard University"><sup>1</sup>Harvard College</span>
+        <span class="affil-group"><img class="lab-logo lab-logo--uw" src="static/images/uw.svg" alt="University of Washington"><sup>2</sup>University of Washington</span>
+        <span class="affil-group"><img class="lab-logo" src="static/images/kempner.png" alt="Kempner Institute"><sup>3</sup>Kempner Institute &middot; Harvard</span>
+        <span class="affil-group"><img class="lab-logo" src="static/images/harvard.svg" alt="Harvard University"><sup>4</sup>Psychology &amp; CBS &middot; Harvard</span>
+      </div>
     </div>
 
     <div class="button-row">
