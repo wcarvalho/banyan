@@ -6,8 +6,7 @@
   <title>Banyan: Task diversity produces systematic transfer but inhibits continual RL</title>
   <meta name="description" content="Task variety is supposed to make RL agents generalize. Across a changing sequence of tasks, we find the reverse: past a point, more variety makes an agent plateau at a lower level instead of continuing to climb. Read the paper." />
 
-  <!-- Pre-launch feedback build: keep out of search indexes until arXiv/code are public. -->
-  <meta name="robots" content="noindex, nofollow" />
+  <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://wcarvalho.github.io/banyan/" />
 
   <!-- Open Graph -->
@@ -29,7 +28,7 @@
   <meta name="twitter:image" content="https://wcarvalho.github.io/banyan/static/og-card-2.png" />
   <meta name="twitter:image:alt" content="Banyan project page social card." />
 
-  <!-- Google Scholar citation tags (arXiv id added once minted) -->
+  <!-- Google Scholar / arXiv citation tags -->
   <meta name="citation_title" content="Task diversity produces systematic transfer but inhibits continual reinforcement learning" />
   <meta name="citation_author" content="Seth, Purab" />
   <meta name="citation_author" content="Shah, Neil" />
@@ -38,7 +37,8 @@
   <meta name="citation_author" content="Kleiman-Weiner, Max" />
   <meta name="citation_author" content="Carvalho, Wilka" />
   <meta name="citation_publication_date" content="2026" />
-  <meta name="citation_pdf_url" content="https://wcarvalho.github.io/banyan/static/banyan-paper.pdf" />
+  <meta name="citation_arxiv_id" content="2606.00880" />
+  <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2606.00880" />
 
   <!-- Schema.org -->
   <script type="application/ld+json">
@@ -269,7 +269,7 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
   <div class="topnav__inner">
     <a class="topnav__brand" href="#">Banyan</a>
     <div class="topnav__links">
-      <a href="#tldr">TLDR</a>
+      <a href="#setup">Setup</a>
       <a href="#banyan">Banyan</a>
       <a href="#evidence">Single shift</a>
       <a href="#results">The paradox</a>
@@ -304,7 +304,7 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     </div>
 
     <div class="button-row">
-      <a class="btn" href="static/banyan-paper.pdf" aria-label="Read the paper (PDF)">📄&nbsp; Paper</a>
+      <a class="btn" href="https://arxiv.org/abs/2606.00880" aria-label="Read the paper on arXiv">📄&nbsp; Paper</a>
       <span class="btn btn--placeholder" aria-label="Code coming soon">💻&nbsp; Code (soon)</span>
       <span class="btn btn--placeholder" aria-label="Thread coming soon">🧵&nbsp; Thread (soon)</span>
     </div>
@@ -317,37 +317,14 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <p class="hero__demo-cap">Each Banyan world is a map the agent moves through, paired with a goal that splits into sub-goals arranged as a tree. The agent sees only the top goal, never the tree, and has to discover the order things must be done.</p>
   </section>
 
-  <!-- ========== TLDR ========== -->
-  <section id="tldr">
-    <div class="measure">
-      <div class="section__heading">TLDR</div>
-      <div class="tldr">
-        <p>Task variety is the usual recipe for getting agents to generalize. We asked what it does when an agent's tasks never stop changing, and the answer runs both ways. More variety helps the agent pick up each new set of tasks: it starts near where it left off instead of relearning from scratch. But across many sets in a row, that same variety holds it back: its performance on each new set levels off at a lower ceiling instead of climbing higher than the last. <strong>The agents trained on the most varied sets keep getting better at their old tasks even as their gains on new ones flatten.</strong></p>
-      </div>
-      <ul class="stat-strip">
-        <li><span class="stat-strip__val">Barely any drop</span><span class="stat-strip__lbl">With enough variety, an agent starts a new set of tasks near where it left off, instead of relearning from scratch.</span></li>
-        <li><span class="stat-strip__val">A middle amount wins</span><span class="stat-strip__lbl">Across ten sets of tasks in a row, the agent keeps improving most at moderate variety (16 layouts &times; 16 tree shapes).</span></li>
-        <li><span class="stat-strip__val">Too much backfires</span><span class="stat-strip__lbl">Push variety higher and success on the final set drops (0.95 to 0.80): the agent stops climbing from one set to the next.</span></li>
-      </ul>
-    </div>
-
-    <p class="measure" style="margin-top: var(--sp-4);">Here is the whole finding in four steps, from the tool we built to the result that surprised us.</p>
-    <ol class="contributions">
-      <li><strong>A simulator that turns task variety into a dial.</strong> Banyan is a fast, open simulator that lets us turn three ingredients of a task up or down on their own: the map <span class="axis">layouts (𝕃)</span> an agent navigates, the <span class="axis">task-tree topologies (𝕋)</span> that set how its sub-goals depend on one another, and the <span class="axis">task-tree object assignments (𝕆)</span> that fill those sub-goals with concrete objects. Together they define billions of tasks, and it runs on an academic budget.</li>
-      <li><strong>One new set of tasks: the relearning disappears.</strong> Give an agent a new set of tasks, and more variety along any one of those three ingredients lets it start near where it ended the last set, instead of relearning from scratch. This holds for two standard RL algorithms, PPO and PQN.</li>
-      <li><strong>Ten sets in a row: the story flips.</strong> Chain ten sets of tasks one after another, and long-run success peaks at a middle amount of variety (16 layouts by 16 topologies), then steadily declines as variety grows. More variety, less improvement over the long run.</li>
-      <li><strong>What stalls is specialization, not learning.</strong> That same variety keeps lifting the agent's performance on its first set of tasks even as its progress on new sets flattens. The agent is learning the structure shared across tasks while losing the ability to specialize to any one of them.</li>
-    </ol>
-  </section>
-
   <!-- ========== WHY DIVERSITY (T2-T3) ========== -->
   <section id="setup">
     <div class="measure">
       <div class="section__heading">The setup</div>
       <h2>Variety is the standard route to generalization</h2>
-      <p class="lead">This recipe has a strong track record.</p>
-      <p>Domain randomization varies an environment's visual and physical properties so that a policy trained only in simulation works on a real robot. XLand trained agents on a huge space of games, and they then solved millions of unseen ones with no extra training. Lake and Baroni showed that the <em>right</em> set of training tasks can even teach a neural network to generalize compositionally, a question open since Fodor and Pylyshyn first raised it.</p>
-      <p>Almost all of this evidence tests an agent <em>after</em> training has stopped, with its weights frozen. <strong>Nobody has asked what task variety does while the agent is still learning</strong>, as it moves through one new set of tasks after another. That is the question Banyan is built to answer.</p>
+      <p>In machine learning, a striking pattern has emerged across settings: training on diverse task distributions consistently enables generalization to new ones, without additional training. <a href="https://doi.org/10.1109/IROS.2017.8202133">Tobin et al. (2017)</a> demonstrated this first in robotics, showing that varying an environment's visual and physical properties during simulation training was sufficient for policies to transfer to real robots. At larger scale, the <a href="https://arxiv.org/abs/2107.12808">Open Ended Learning Team (2021)</a> trained agents across a vast space of games and found they solved millions of unseen games with no extra training. <a href="https://openreview.net/forum?id=zBBYsVGKuB">Jha et al. (2025)</a> extended this logic to multi-agent coordination, showing that diverse task sets during training enabled zero-shot coordination with entirely new partners. Each result points the same direction: the breadth of training experience, not its depth on any single task, is what drives generalization.</p>
+      <p>In cognitive science, <a href="https://doi.org/10.1016/0010-0277(88)90031-5">Fodor and Pylyshyn (1988)</a> identified systematicity as a core property of cognition that connectionist models were thought to lack. <a href="https://arxiv.org/abs/1910.00571">Hill et al. (2019)</a> provided early evidence that diversity in the training environment, not architecture, drives systematicity in situated agents. <a href="https://doi.org/10.1038/s41586-023-06668-3">Lake and Baroni (2023)</a> then answered the challenge definitively, showing that the right training task distribution induces human-like systematic generalization in neural networks, with direct comparisons to human behavior. This body of evidence converges on a clear principle: task diversity is the lever. What it leaves open is whether that lever works only at training time.</p>
+      <p>However, almost all of this evidence tests an agent after training has stopped, with its weights frozen. Far less is known about what task variety does while the agent is still learning, as it moves through one new environment after another. Banyan is built to study exactly that.</p>
     </div>
   </section>
 
@@ -356,8 +333,7 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <div class="measure">
       <div class="section__heading">The idea</div>
       <h2>Banyan: turn the ingredients of a task into dials</h2>
-      <p>A Banyan task is a small world the agent moves through, plus a goal. The goal splits into sub-goals, and those sub-goals are arranged as a tree. We can dial three ingredients of the task on their own: the map <span class="axis">layouts (𝕃)</span> the agent navigates, the <span class="axis">task-tree topologies (𝕋)</span> that set how the sub-goals depend on one another, and the <span class="axis">task-tree object assignments (𝕆)</span> that decide which concrete objects fill each sub-goal. Varying one at a time is what lets us pin an effect on a specific kind of variety rather than on variety in general.</p>
-      <p>Trees are a useful way to describe a task because most tasks can be written as trees, including language. When we change a tree's <em>topology</em>, we change the compositional structure of the task: which sub-goals must be solved, and in what order. That makes topology the ingredient where compositional structure should matter most, and it is the one to watch.</p>
+      <p>A Banyan task is a small world the agent moves through, plus a goal. The goal splits into sub-goals arranged as a tree. We control three ingredients independently: the map <span class="axis">layouts (𝕃)</span> the agent navigates and the <span class="axis">task-tree topologies (𝕋)</span> that set how sub-goals depend on one another. A third axis, <span class="axis">task-tree object assignments (𝕆)</span>, decides which concrete objects fill each sub-goal. This design lets us pin an effect on a specific kind of variety rather than on variety in general.</p>
     </div>
     <figure>
       <img src="static/figures/environment.png" alt="Overview of Banyan: a task is a map plus a goal that splits into sub-goals arranged as a tree; the layouts, task-tree topologies, and object assignments can each be dialed independently; procedural generation yields billions of tasks." loading="lazy" />
@@ -369,28 +345,28 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
   <section id="evidence">
     <div class="measure">
       <div class="section__heading">One distribution shift</div>
-      <h2>One change of tasks: the relearning vanishes</h2>
-      <p>Start by changing the agent's tasks just once, from a first set to a second. The moment the tasks change, performance usually drops and the agent has to relearn. We call the size of that drop the <strong>transfer gap</strong>: how far the agent falls, and so how much it must relearn. Increasing the variety along any one of the three ingredients shrinks this gap toward zero. The agent begins the second set near the performance it reached on the first, even when the best strategy for the two sets is different. This holds for both PPO and PQN.</p>
+      <h2>Across a single distribution shift, diversity produces systematic transfer</h2>
+      <p>Start by changing the agent's tasks just once, from a first set to a second. The moment the tasks change, performance usually drops and the agent has to relearn. We call the size of that drop the <strong>transfer gap</strong>. Increasing the variety along any one of the three ingredients shrinks this gap toward zero. The agent begins the second set near the performance it reached on the first, even when the best strategy for the two sets is different. This holds for both <a href="https://arxiv.org/abs/1707.06347">PPO</a> and <a href="https://arxiv.org/abs/2407.04811">PQN</a>.</p>
     </div>
-    <figure class="fig--wide">
+    <figure>
       <img src="static/figures/single-shift.png" alt="Plots showing the transfer gap shrinking toward zero as variety increases along layouts, object assignments, and topologies, for both PPO and PQN." loading="lazy" />
       <figcaption><span class="figure-label">Figure 2</span> <strong>More variety along any one ingredient shrinks the transfer gap toward zero:</strong> the agent begins a new set of tasks near where it ended the last. Shown for both PPO (top) and PQN (bottom).</figcaption>
     </figure>
 
     <div class="measure">
-      <h3>Only the tree shape helps old tasks</h3>
-      <p>Now look the other way. <strong>Backward transfer</strong> asks how the agent's skill on an earlier set of tasks changes after it trains on a later one. Here the three ingredients come apart. Adding more layouts or more object assignments does almost nothing. Adding more topologies makes a large difference. This holds for both PPO and PQN, and it is the first sign that what the agent carries forward is compositional structure, not surface detail.</p>
+      <h3>Only varying the number of tree shapes improves backward transfer</h3>
+      <p><strong>Backward transfer</strong> reveals a sharper asymmetry. Expanding the number of layouts or object assignments leaves performance on earlier tasks unchanged. Changing topology diversity is the exception: adding more topologies produces a large gain. This pattern holds for both PPO and PQN. What the agent carries forward is compositional structure, not surface detail.</p>
     </div>
-    <figure class="fig--wide">
+    <figure>
       <img src="static/figures/backward-topology.png" alt="Backward transfer to the first set of tasks improves as the number of topologies increases, but stays flat for layouts and object assignments." loading="lazy" />
       <figcaption><span class="figure-label">Figure 3</span> <strong>Only varying the number of topologies improves backward transfer to the first set of tasks;</strong> varying layouts or object assignments does not. Shown for both PPO (top) and PQN (bottom).</figcaption>
     </figure>
 
     <div class="measure">
       <h3>The effect is not an artifact of grid-worlds</h3>
-      <p>To check that none of this depends on a grid world, we built a continuous-control version of Banyan, where the agent drives a point mass into objects to push them around. The effect persists: more variety still improves how the agent both starts on new tasks and holds onto old ones.</p>
+      <p>We built a continuous-control version of Banyan where the agent drives a point mass to push objects around. The effect persists: more variety still improves both initial performance on new tasks and retention of old ones.</p>
     </div>
-    <figure>
+    <figure style="max-width: 40%">
       <img src="static/figures/continuous.png" alt="Results in the continuous-control point-mass version of Banyan, showing the same variety effect on starting new tasks and holding onto old ones." loading="lazy" />
       <figcaption><span class="figure-label">Figure 4</span> <strong>The same effect appears in a continuous-control version of Banyan,</strong> where the agent drives a point mass into objects. More variety improves how it both starts on new tasks and holds onto old ones.</figcaption>
     </figure>
@@ -401,14 +377,14 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <div class="measure">
       <div class="section__heading">The paradox</div>
       <h2>Across ten sets of tasks, variety holds the agent back</h2>
-      <p>What happens across a sequence of ten sets of tasks, one after another? We grow two ingredients together, the number of layouts and the number of topologies, and let a single agent learn through all ten in turn. The quantity to watch is the success rate the agent reaches by the end of its tenth set. Plot that against variety and the trend inverts: the final success climbs to a peak at a middle amount of variety, then falls the more we add.</p>
-      <p>At that <strong>middle amount of variety</strong> (16 layouts by 16 topologies) the final success <em>climbs</em> with each new set: the agent gets better and better at picking up the next one. Past that point, more variety steadily <em>lowers</em> it. As variety grows from 16 toward 256, the final success rate falls in order, from about 0.95 to 0.91, 0.86, 0.82, and 0.80. The same variety that smooths every single change is what flattens the long run.</p>
+      <p>We jointly vary the number of layouts and the number of topologies across ten successive task sets, training a single agent through all ten in turn. We track the success rate the agent achieves by the end of its tenth set. Plotting that success rate against task diversity reveals an inversion: performance climbs to a peak at a moderate level of diversity, then falls as diversity increases further.</p>
+      <p>At that <strong>middle amount of variety</strong> (16 layouts by 16 topologies) the final success <em>climbs</em> with each new set of tasks added to training. Past that point, more task diversity steadily <em>lowers</em> it. As variety grows from 16 toward 256 layouts-by-topologies, final success falls across the full range from roughly 0.95 to 0.80. The diversity that helps within any single curriculum ultimately limits what the curriculum can build.</p>
     </div>
-    <figure class="fig--wide">
+    <figure>
       <img src="static/figures/paradox.png" alt="Across ten sets of tasks, final success climbs at a middle amount of variety (16 by 16) but plateaus at the highest variety (256)." loading="lazy" />
       <figcaption><span class="figure-label">Figure 5</span> <strong>Across ten sets of tasks, a middle amount of variety keeps the agent improving, while the highest variety makes long-run progress flatten.</strong> Final success rate on each set in the sequence. The climbing curve is 16 layouts by 16 topologies; the flat one is the highest-variety condition.</figcaption>
     </figure>
-    <figure class="fig--wide">
+    <figure>
       <img src="static/figures/depth6.png" alt="Success rate through training across the ten sets of tasks, for the deepest tasks alone. Low-variety curves relearn from near zero at each new set and spike high; high-variety curves stay flat at a lower level." loading="lazy" />
       <figcaption><span class="figure-label">Figure 6</span> <strong>The same pattern is sharpest on the deepest tasks, those with the longest chains of sub-goals.</strong> Success rate through all ten sets for depth 6 alone. Each new set begins at a dashed line. The low-variety curves (red) relearn from near zero at every set and climb steeply; the high-variety curves (green) stay flat at a lower level, gaining little from one set to the next.</figcaption>
     </figure>
@@ -418,42 +394,22 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
   <section id="why">
     <blockquote class="pullquote">What stalls is not learning, but specialization.</blockquote>
     <div class="measure">
-      <p>Here is the strange part. The more variety an agent has seen, the better it keeps getting on its very first set of tasks, even as its gains on new ones level off. The agent trained on the most varied sets is still improving on its old tasks while its progress on new ones plateaus.</p>
-      <p>The two halves fit together once you see what the agent is learning. It is picking up the structure <em>shared</em> across tasks, and that shared structure is exactly what lifts the old sets. What it loses is the ability to <em>specialize</em> to whatever is new in the set in front of it. Varied early sets interfere with later ones. Variety buys a general solution at the cost of a sharp one.</p>
+      <p>The more task variety an agent has seen, the better it keeps improving on its first set of tasks, even as gains on new ones level off. At the highest variety, the agent is still advancing on old tasks while its progress on new ones plateaus.</p>
+      <p>The two halves fit together once you see what the agent is learning. The agent picks up the structure <em>shared</em> across tasks, and that shared structure is exactly what lifts the old sets. It loses the ability to <em>specialize</em> to whatever is new in the set in front of it. Varied early sets interfere with later ones. Variety buys a general solution at the cost of a sharp one.</p>
     </div>
-    <figure class="fig--wide">
+    <figure>
       <img src="static/figures/backward-continual.png" alt="Success on the first set of tasks keeps rising across the ten-set sequence as variety increases, even as progress on new sets flattens." loading="lazy" />
       <figcaption><span class="figure-label">Figure 7</span> <strong>The more variety the agent sees, the more its success on the very first set keeps climbing,</strong> even as its progress on new sets flattens.</figcaption>
     </figure>
   </section>
 
-  <!-- ========== WHAT WE RULED OUT (T12) + NEXT ========== -->
+  <!-- ========== READ MORE ========== -->
   <section id="next">
     <div class="measure">
-      <div class="section__heading">What's next</div>
-      <h2>Is this just loss of plasticity? We don't think so</h2>
-      <p>The obvious suspect is loss of plasticity, the network slowly going rigid until it can no longer learn. We tested that directly. <strong>Continual Backprop, a method built to keep networks plastic, does not recover the lost progress.</strong> Making the network bigger does not seem to either, though that result is still being finalized. The likeliest explanation is <em>interference</em>: the structure shared across sets, which the agent keeps consolidating, competes with the specialization each new set demands.</p>
-    </div>
-    <figure class="fig--wide">
-      <img src="static/figures/ruled-out-cbp.png" alt="Across ten sets of tasks, the flattening of long-run progress remains even with Continual Backprop." loading="lazy" />
-      <figcaption><span class="figure-label">Figure 8</span> <strong>Keeping the network plastic does not restore the lost progress:</strong> the flattening remains under Continual Backprop, evidence against a loss-of-plasticity explanation.</figcaption>
-    </figure>
-
-    <aside class="note">
-      <strong>Scope.</strong> Banyan is a controlled testbed, not a benchmark to top. The point is the reversal: the relationship between task variety and long-run learning reverses past a middle amount of variety, and we can trace it to one ingredient (the task-tree topologies). The capacity result mentioned above is still being finalized for the appendix; see the paper for the current state.
-    </aside>
-
-    <details class="methods">
-      <summary>Methods &amp; experimental detail</summary>
-      <div class="methods__body">
-        <p>Each task is built by drawing a layout from a precomputed pool and a task tree from a precomputed set of distinct trees. A tree's topology fixes its depth, its branching, and whether each node transforms a single object or combines two, which together set which sub-goals must be solved and in what order. The objects that fill the leaves are placed on reachable tiles in the layout. The agent sees only the <em>root</em> of the tree as its goal. It never sees the tree itself, and has to learn which sequences of object interactions finish the task.</p>
-        <p><strong>Single-shift study:</strong> PPO and PQN (Parallelized Q-Network), sweeping variety along each ingredient on its own. <strong>Ten-shift study:</strong> layouts and topologies grown together, with Continual Backprop and a capacity sweep as controls. Full hyperparameters, the other axes, and depth-wise breakdowns are in the paper.</p>
+      <div class="cta">
+        <p>Interested in learning more?</p>
+        <a class="btn" href="https://arxiv.org/abs/2606.00880" aria-label="Read the paper on arXiv">📄&nbsp; Read the paper</a>
       </div>
-    </details>
-
-    <div class="cta">
-      <p>The paper works through the other axes of variety, the continuous-control version, and the controls behind these claims.</p>
-      <a class="btn" href="static/banyan-paper.pdf" aria-label="Read the paper (PDF)">📄&nbsp; Read the paper</a>
     </div>
   </section>
 
@@ -462,17 +418,18 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
     <div class="measure">
       <div class="section__heading">Cite</div>
       <h2>BibTeX</h2>
-      <span class="cite-pending">Citation pending. Preprint; arXiv ID will be added once minted.</span>
       <div class="bibtex">
         <button class="bibtex__copy" data-target="bibtex-block">Copy</button>
         <pre id="bibtex-block"><code>@misc{seth2026banyan,
-  title  = {Task diversity produces systematic transfer but
-            inhibits continual reinforcement learning},
-  author = {Seth, Purab and Shah, Neil and Jha, Kunal and
-            Gershman, Samuel J. and Kleiman-Weiner, Max and
-            Carvalho, Wilka},
-  year   = {2026},
-  note   = {Preprint.}
+  title         = {Task diversity produces systematic transfer but
+                   inhibits continual reinforcement learning},
+  author        = {Seth, Purab and Shah, Neil and Jha, Kunal and
+                   Gershman, Samuel J. and Kleiman-Weiner, Max and
+                   Carvalho, Wilka},
+  year          = {2026},
+  eprint        = {2606.00880},
+  archivePrefix = {arXiv},
+  url           = {https://arxiv.org/abs/2606.00880}
 }</code></pre>
       </div>
     </div>
@@ -486,11 +443,11 @@ footer .footer__cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: v
       <strong>Banyan</strong><br />
       Task diversity produces systematic transfer but inhibits continual reinforcement learning<br />
       Seth · Shah · Jha · Gershman · Kleiman-Weiner · Carvalho<br />
-      Preprint
+      arXiv 2606.00880
     </div>
     <div>
       <strong>Resources</strong><br />
-      <a href="static/banyan-paper.pdf">Paper (PDF)</a><br />
+      <a href="https://arxiv.org/abs/2606.00880">Paper (arXiv)</a><br />
       Code coming soon<br />
       Thread coming soon
     </div>
